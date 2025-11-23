@@ -47,19 +47,32 @@ public class OyVeyGui extends Screen {
         INSTANCE = this;
     }
 
-    private void load() {
-        int x = -84;
-        for (Module.Category category : OyVey.moduleManager.getCategories()) {
-            if (category == Module.Category.HUD) continue;
-            Widget panel = new Widget(category.getName(), x += 90, 4, true);
-            OyVey.moduleManager.stream()
-                    .filter(m -> m.getCategory() == category && !m.hidden)
-                    .map(ModuleButton::new)
-                    .forEach(panel::addButton);
-            this.widgets.add(panel);
-        }
-        this.widgets.forEach(components -> components.getItems().sort(Comparator.comparing(Feature::getName)));
+private void load() {
+    // 1. Define a fixed starting x-coordinate for the single column
+    int x = 4; // Start near the left edge of the screen
+    // 2. Define a starting y-coordinate that will be updated in the loop
+    int y = 4;
+    
+    for (Module.Category category : OyVey.moduleManager.getCategories()) {
+        if (category == Module.Category.HUD) continue;
+        
+        // Use the fixed 'x' and the dynamic 'y' for the position
+        Widget panel = new Widget(category.getName(), x, y, true); 
+        
+        OyVey.moduleManager.stream()
+                .filter(m -> m.getCategory() == category && !m.hidden)
+                .map(ModuleButton::new)
+                .forEach(panel::addButton);
+                
+        this.widgets.add(panel);
+        
+        // 3. Update the 'y' coordinate for the next panel
+        // The next panel starts immediately after the current panel's title bar.
+        // The default height of a Widget is 18, so we add that plus a small gap (e.g., 2 pixels).
+        y += panel.getHeight() + 2; 
     }
+    this.widgets.forEach(components -> components.getItems().sort(Comparator.comparing(Feature::getName)));
+}
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
