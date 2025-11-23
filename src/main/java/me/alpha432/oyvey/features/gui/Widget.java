@@ -51,7 +51,7 @@ public class Widget
         this.drag(mouseX, mouseY);
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
         int color = ClickGui.getInstance().topColor.getValue().getRGB();
-        context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, 0xFFFF0000); // 0xFFFF0000 is red
+        context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, 0xFF2E2D2C); // Changes the top bar color to red.
         if (this.open) {
             RenderUtil.rect(context, this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, 0x77000000);
         }
